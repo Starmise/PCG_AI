@@ -119,6 +119,72 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &195803391 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 1fc8b0c1e0d6b36498effcd91f89003c, type: 3}
+  m_PrefabInstance: {fileID: 1539236296}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &195803392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195803391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48e7d1d6eef009340b7c5ae8f9e88ec6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+--- !u!54 &195803395
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195803391}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!1 &255851314 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4629566982384488652, guid: 1fc8b0c1e0d6b36498effcd91f89003c, type: 3}
+  m_PrefabInstance: {fileID: 1539236296}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &255851317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 255851314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63ce0da7a0b4091458a8f2045d09707d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tailRootName: C_Root_Main_Root_Jnt
+  waveSpeed: 2
+  waveAmplitude: 10
+  gizmoColor: {r: 0, g: 0.1626494, b: 1, a: 1}
 --- !u!1 &860271985
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,7 +502,16 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1fc8b0c1e0d6b36498effcd91f89003c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 195803392}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1fc8b0c1e0d6b36498effcd91f89003c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 195803395}
+    - targetCorrespondingSourceObject: {fileID: 4629566982384488652, guid: 1fc8b0c1e0d6b36498effcd91f89003c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 255851317}
   m_SourcePrefab: {fileID: 100100000, guid: 1fc8b0c1e0d6b36498effcd91f89003c, type: 3}
 --- !u!1 &1810628325
 GameObject:
