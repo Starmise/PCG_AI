@@ -6,6 +6,11 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5f; // Velocidad del personaje
     private Vector3 moveDirection; // Dirección a la que se mueve el personaje
 
+    private float nextFireTime = 0f;
+    public static int numClicks = 0;
+    private float lastClickedTime = 0f;
+    private float maxComboDelay = 1;
+
     // Referencias
     private Rigidbody rb;
     private Animator animator;
@@ -36,6 +41,36 @@ public class PlayerController : MonoBehaviour
         {
             transform.forward = moveDirection;
         }
+
+        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f
+           && animator.GetCurrentAnimatorStateInfo(0).IsName("1stPunch"))
+        {
+            animator.SetBool("Attack1", false);
+        }
+        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f
+           && animator.GetCurrentAnimatorStateInfo(0).IsName("2ndPunch"))
+        {
+            animator.SetBool("Attack2", false);
+        }
+        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f
+           && animator.GetCurrentAnimatorStateInfo(0).IsName("Kick"))
+        {
+            animator.SetBool("Attack3", false);
+            numClicks = 0;
+        }
+
+        // Comprobar que se pueda realizar el combo y que el personaje pueda atacar
+        if (Time.time - lastClickedTime > maxComboDelay)
+        {
+            numClicks = 0;
+        }
+        if (Time.time > nextFireTime)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                OnClick();
+            }
+        }
     }
 
     /// <summary>
@@ -47,5 +82,37 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         rb.linearVelocity = moveDirection * moveSpeed;
+    }
+
+    /// <summary>
+    /// Al dar click el jugador hará la animación de atacar, donde depndiendo del número
+    /// de clicks, hará una animación diferente para un combo.
+    /// </summary>
+    void OnClick()
+    {
+        lastClickedTime = Time.time;
+        numClicks++;
+
+        // Un click = primer ataque
+        if (numClicks == 1)
+        {
+            animator.SetBool("Attack1", true);
+        }
+
+        // Dos clicks y la animación se encuentra en el primer ataque = segundo ataque
+        if (numClicks >= 2 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f
+           && animator.GetCurrentAnimatorStateInfo(0).IsName("1stPunch"))
+        {
+            animator.SetBool("Attack1", false);
+            animator.SetBool("Attack2", true);
+        }
+
+        // Tres clicks y la animación se encuentra en el segundo ataque = tercer ataque
+        if (numClicks >= 3 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f
+           && animator.GetCurrentAnimatorStateInfo(0).IsName("2ndPunch"))
+        {
+            animator.SetBool("Attack2", false);
+            animator.SetBool("Attack3", true);
+        }
     }
 }

@@ -645,6 +645,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cerberus
       objectReference: {fileID: 0}
+    - target: {fileID: 4629566982384488652, guid: 1fc8b0c1e0d6b36498effcd91f89003c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 1fc8b0c1e0d6b36498effcd91f89003c, type: 3}
       propertyPath: m_Controller
       value: 
