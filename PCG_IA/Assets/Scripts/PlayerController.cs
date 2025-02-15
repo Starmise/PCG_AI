@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // Variables num閞icas
+    // Variables num茅ricas
     public float moveSpeed = 5f; // Velocidad del personaje
-    private Vector3 moveDirection; // Direcci髇 a la que se mueve el personaje
+    private Vector3 moveDirection; // Direcci贸n a la que se mueve el personaje
 
     private float nextFireTime = 0f;
     public static int numClicks = 0;
@@ -34,8 +34,8 @@ public class PlayerController : MonoBehaviour
 
     /// <summary>
     /// Se aplica el movimiento del personale para que la velocidad del jugador se aplique
-    /// en la direcci髇 correcta. Se hace en FixedUpdate en lugar de Update para que la
-    /// actualizaci髇 sea constante, ya que este tiene una tasa de actualizaci髇 fija,
+    /// en la direcci贸n correcta. Se hace en FixedUpdate en lugar de Update para que la
+    /// actualizaci贸n sea constante, ya que este tiene una tasa de actualizaci贸n fija,
     /// mientras que Update depende de los frames del juego.
     /// </summary>
     private void FixedUpdate()
@@ -44,21 +44,21 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Maneja la entrada del jugador para moverse y actualizar la animaci髇.
+    /// Maneja la entrada del jugador para moverse y actualizar la animaci贸n.
     /// </summary>
     private void HandleMovementInput()
     {
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveZ = Input.GetAxisRaw("Vertical");
 
-        // Calcular la direcci髇 a la que se mueve
+        // Calcular la direcci贸n a la que se mueve
         moveDirection = new Vector3(moveX, 0, moveZ).normalized;
 
-        // Cambia la animaci髇 a correr
+        // Cambia la animaci贸n a correr
         bool isRunning = moveDirection.magnitude > 0;
         animator.SetBool("isRunning", isRunning);
 
-        // Rotaci髇 del personahe a donde se ande moviendo
+        // Rotaci贸n del personahe a donde se ande moviendo
         if (isRunning)
         {
             transform.forward = moveDirection;
@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Controla la l骻ica de los ataques y la gesti髇 del combo.
+    /// Controla la l贸gica de los ataques y la gesti贸n del combo.
     /// </summary>
     private void HandleAttackLogic()
     {
@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Gestiona la ejecuci髇 del combo basado en la cantidad de clicks y el estado de la animaci髇.
+    /// Gestiona la ejecuci贸n del combo basado en la cantidad de clicks y el estado de la animaci贸n.
     /// </summary>
     private void ProcessCombo()
     {
