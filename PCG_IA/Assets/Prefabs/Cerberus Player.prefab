@@ -62,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9e6eb380d5d8b994bac5c0b17e7bea8e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9e6eb380d5d8b994bac5c0b17e7bea8e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -70,7 +70,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9e6eb380d5d8b994bac5c0b17e7bea8e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9e6eb380d5d8b994bac5c0b17e7bea8e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1632,6 +1632,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 3f14c57954b43044cb7152154f0d8966, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 9e6eb380d5d8b994bac5c0b17e7bea8e, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5902132292954375259, guid: 9e6eb380d5d8b994bac5c0b17e7bea8e, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -2120,7 +2124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tailRootName: C_Root_Main_Root_Jnt
   waveSpeed: 2
-  waveAmplitude: 10
+  waveAmplitude: 0.2
   gizmoColor: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &5388309291640389632 stripped
 GameObject:
@@ -2218,7 +2222,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
