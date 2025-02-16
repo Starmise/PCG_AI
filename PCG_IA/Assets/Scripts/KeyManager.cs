@@ -28,7 +28,7 @@ public class KeyManager : MonoBehaviour
         if (keyCount > 0)
         {
             keyCount--; // Resta una llave
-            keyText.text = "Llaves: " + keyCount; // Actualiza la UI
+            keyText.text = "" + keyCount; // Actualiza la UI
         }
     }
 }
