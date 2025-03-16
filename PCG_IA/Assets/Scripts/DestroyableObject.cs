@@ -2,11 +2,18 @@ using UnityEngine;
 
 public class DestroyableObject : MonoBehaviour
 {
+    // Variables numericas
     public int maxHits = 3; // Vida antes de destruirse
     private int currentHits = 0; // Contador de golpes
 
+    /// <summary>
+    /// Verifica si el objeto que colisiona es el jugador y si está atacando.  
+    /// Si el jugador está atacando, se aumenta el contador de golpes, y si 
+    /// se supera el máximo permitido, el objeto se destruye.
+    /// </summary>
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("OnTriggerEnter llamado con: " + other.name);
         // Verificar si el objeto que golpea pertenece al jugador
         GameObject rootObject = other.transform.root.gameObject;
 
@@ -25,6 +32,18 @@ public class DestroyableObject : MonoBehaviour
                 {
                     Destroy(gameObject); // Destruye el objeto (caja) tras 3 golpes
                 }
+            }
+        }
+
+        // Verificar si el objeto que colisiona tiene la layer "Bullet"
+        else if (rootObject.layer == LayerMask.NameToLayer("Bullet"))
+        {
+            Debug.Log("Oh le has disparado a la caja");
+            currentHits++;
+
+            if (currentHits >= maxHits)
+            {
+                Destroy(gameObject); // Destruye el objeto (caja) tras 3 golpes
             }
         }
     }
