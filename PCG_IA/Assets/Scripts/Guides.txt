@@ -1,0 +1,7 @@
+Fuentes utilizadas para realizar el proyecto:
+
+https://stackoverflow.com/questions/55984/what-is-the-difference-between-const-and-readonly-in-c
+
+https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/tokens/interpolated
+
+https://stackoverflow.com/questions/23748153/escape-key-press-event-lingering-from-previous-action
