@@ -12,6 +12,9 @@ public class EnemyView : MonoBehaviour
 {
     private EnemyController controller;
     public TMP_Text enemyStatsTxt;
+    public TMP_Text difficulty_txt;
+
+    private int currentFunctionVersion = 1; // Función inicial
 
     /// <summary>
     /// Acá ya se crea (al menos en teoría lógica) el enemigo,con valores que ya aleatorios.
@@ -22,17 +25,57 @@ public class EnemyView : MonoBehaviour
     void Start()
     {
         controller = EnemyController.CreateRandomEnemy();
-
+        currentFunctionVersion = Random.Range(1, 6); // Selecciona una función aleatoria entre 1 y 5
+        UpdateUI();
+        /*
+         * Codigo original
         // Obtener las estadísticas y mostrarlas en consola
         string stats = controller.GetEnemyStats().ToString();
         Debug.Log(stats);
 
-        Debug.Log("Dificultad del enemigo: " + controller.GetDifficulty(1));
+        float difficulty = controller.GetDifficulty(1);
+        Debug.Log("Dificultad del enemigo: " + difficulty);
+
+        // Debug.Log("Dificultad del enemigo: " + controller.GetDifficulty(1));
 
         // Mostrar en la UI
         if (enemyStatsTxt != null)
         {
             enemyStatsTxt.text = stats;
         }
+
+        if (difficulty_txt != null)
+        {
+            int difficultyInt = (int)difficulty; // Corta los decimales
+            difficulty_txt.text = "Dificultad: " + difficultyInt;
+        }
+        */
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1)) ChangeDifficultyFunction(1);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) ChangeDifficultyFunction(2);
+        if (Input.GetKeyDown(KeyCode.Alpha3)) ChangeDifficultyFunction(3);
+        if (Input.GetKeyDown(KeyCode.Alpha4)) ChangeDifficultyFunction(4);
+        if (Input.GetKeyDown(KeyCode.Alpha5)) ChangeDifficultyFunction(5);
+    }
+
+    void ChangeDifficultyFunction(int newFunctionVersion)
+    {
+        currentFunctionVersion = newFunctionVersion;
+        UpdateUI();
+    }
+
+    void UpdateUI()
+    {
+        string stats = controller.GetEnemyStats().ToString();
+        float difficulty = controller.GetDifficulty(currentFunctionVersion);
+
+        if (enemyStatsTxt != null)
+            enemyStatsTxt.text = stats;
+
+        if (difficulty_txt != null)
+            difficulty_txt.text = "Dificultad: " + Mathf.RoundToInt(difficulty); // Sin decimales
     }
 }

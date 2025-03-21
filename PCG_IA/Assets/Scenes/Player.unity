@@ -313,6 +313,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyStatsTxt: {fileID: 1406156048}
+  difficulty_txt: {fileID: 1353303973}
 --- !u!4 &772930053
 Transform:
   m_ObjectHideFlags: 0
@@ -947,7 +948,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -400}
+  m_AnchoredPosition: {x: 0, y: -500}
   m_SizeDelta: {x: 250, y: 100}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1404832008
