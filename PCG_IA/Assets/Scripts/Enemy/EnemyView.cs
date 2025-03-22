@@ -11,21 +11,27 @@ using UnityEngine.AI;
 /// </summary>
 public class EnemyView : MonoBehaviour
 {
-    private EnemyController controller;
+    [Header("UI")]
     public TMP_Text enemyStatsTxt;
     public TMP_Text difficulty_txt;
 
-    private NavMeshAgent agent;
+    [Header("Movement")]
     public Transform player;
-
     // Variables para el enemigo Podadora
     public Transform puntoA;
     public Transform puntoB;
-    private Vector3 destinoActual;
-
     public enum EnemyType { Escapista, Agresivo, Podadora }
     public EnemyType enemyType;
 
+    [Header("EffectsObjects")]
+    public GameObject objectPoison;
+    public GameObject objectBurn;
+    public GameObject objectShock;
+
+    private EnemyController controller;
+    private NavMeshAgent agent;
+    private Vector3 destinoActual;
+    private float attackCooldown = 0f;
     private int currentFunctionVersion = 1; // Función inicial
 
     /// <summary>
@@ -116,4 +122,73 @@ public class EnemyView : MonoBehaviour
         Debug.Log("Dificultad del enemigo: " + difficulty);
         Debug.Log("FF usada: " + currentFunctionVersion);
     }
+
+    /// <summary>
+    /// Ok Lucio, ya se que a ti no te gusta documentarme tu código, pero yo no soy asi.
+    /// De momento probaré con OnTriggerStay, es decir, mientras el enemigo esté dentro del
+    /// trigger del juagdor, este aplicará daño
+    /// </summary>
+    void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            attackCooldown -= Time.deltaTime;
+
+            if (attackCooldown <= 0)
+            {
+                // Atacamos al jugador accediendo al nuevo script de la vida del jugador.
+                PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+                if (playerHealth != null)
+                {
+                    playerHealth.TakeDamage(controller.GetEnemyStats().AttackPower);
+                }
+
+                // De momento vamos a instanciar un objeto diferente para cada efecto especial,
+                // por el poco tiempo disponible no podemos meter VFX, y sepa dios como se hacen.
+                HandleSpecialEffect();
+
+                // Se reinicia el cooldown dependiendo del tiempo de ataque
+                attackCooldown = controller.GetEnemyStats().AttackRate;
+            }
+        }
+    }
+
+    private void HandleSpecialEffect()
+    {
+        string effect = controller.GetEnemyStats().SpecialEffect;
+        //GameObject effectObject = null; // Variable para después hacer que los objetos se instancien como hijos
+
+        switch (effect)
+        {
+            case "Poison":
+                if (objectPoison != null)
+                {
+                    Instantiate(objectPoison, transform.position, Quaternion.identity);
+                }
+                else Debug.LogWarning("Olvidaste asignar el objectPoison");
+                break;
+
+            case "Burn":
+                if (objectBurn != null)
+                {
+                    Instantiate(objectBurn, transform.position, Quaternion.identity);
+                }
+                else Debug.LogWarning("Olvidaste asignar el objectBurn");
+                break;
+
+            case "Shock":
+                if (objectShock != null)
+                {
+                    Instantiate(objectShock, transform.position, Quaternion.identity);
+                }
+                else Debug.LogWarning("Olvidaste asignar el objectShock");
+                break;
+
+            default:
+                // Lol osea, oh my god, en plan holy shit, no hay más efectos y none pues es nada.
+                break;
+        }
+    }
+
+
 }
