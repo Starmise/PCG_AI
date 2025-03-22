@@ -44,13 +44,13 @@ public class EnemyModel
             case 1:
                 return HP + AttackPower * (1.0f / AttackRate) + GetEffectValue();
             case 2:
-                return (HP * Speed) * (AttackPower / AttackRate) + GetEffectValue();
+                return (HP * Speed) + (AttackPower / AttackRate) + GetEffectValue();
             case 3:
                 return (HP + AttackPower) * (1.0f / AttackRate) + (Speed > 1.5f ? 25 : 10);
             case 4:
-                return (HP + GetEffectValue()) * (AttackPower / AttackRate) + (Speed > 1.5f ? 25 : 10);
+                return (HP + GetEffectValue()) * (AttackPower / AttackRate) + (Speed > 1.5f ? 15 : 5);
             case 5:
-                return HP * ((AttackPower * AttackRate) + GetEffectValue()) + (Speed > 1.5f ? 25 : 10);
+                return HP + ((AttackPower * AttackRate) + GetEffectValue()) + (Speed > 4f ? 10 : 5);
             default:
                 Debug.LogError("El valor asignado a la Fitness Function no es válido");
                 return 0;
@@ -75,12 +75,12 @@ public class EnemyModel
     public static EnemyModel GenerateRandomEnemy()
     {
         return new EnemyModel(
-            Random.Range(50f, 200f),
-            Random.Range(5f, 20f),
-            Random.Range(0.5f, 3f),
-            Random.Range(1f, 10f),
+            Random.Range(50f, 200f), // HP
+            Random.Range(5f, 20f), // Ataque
+            Random.Range(0.5f, 2f), // Vel. de Ataque
+            Random.Range(1f, 8f), // Velocidad
             PossibleEffects[Random.Range(0, PossibleEffects.Length)],// Efecto aleatorio
-            Random.Range(5f, 15f)
+            Random.Range(5f, 15f) // Rango de detección
         );
     }
 
@@ -95,7 +95,7 @@ public class EnemyModel
     {
         return $"Enemy Stats:\n" +
                $"- HP: {Mathf.RoundToInt(HP)}\n" +
-               $"- Attack Power: {Mathf.RoundToInt(AttackPower)}\n" +
+               $"- Attack: {Mathf.RoundToInt(AttackPower)}\n" +
                $"- Attack Rate: {Mathf.RoundToInt(AttackRate)}\n" +
                $"- Speed: {Mathf.RoundToInt(Speed)}\n" +
                $"- Special Effect: {SpecialEffect}\n";

@@ -43,15 +43,15 @@ public class EnemyController : MonoBehaviour
         return new EnemyController(randomStats);
     }
 
+    // <summary>
+    /// Este método regresa las estadísticas, pues las necesitaremos para poder mostrarlas.
+    /// Por ahora se muestran en consola, pero el objetivo es que se vean en consola también.
+    /// </summary>
     public EnemyModel GetEnemyStats()
     {
         return enemyStats;
     }
 
-    // <summary>
-    /// Este método regresa las estadísticas, pues las necesitaremos para poder mostrarlas.
-    /// Por ahora se muestran en consola, pero el objetivo es que se vean en consola también.
-    /// </summary>
     public bool ShouldEscape(Vector3 playerPosition, Vector3 enemyPosition)
     {
         // Si es un Escapista, calcula si debe escapar
