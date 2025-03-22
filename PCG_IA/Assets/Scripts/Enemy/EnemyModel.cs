@@ -94,10 +94,10 @@ public class EnemyModel
     public override string ToString()
     {
         return $"Enemy Stats:\n" +
-               $"- HP: {HP}\n" +
-               $"- Attack Power: {AttackPower}\n" +
-               $"- Attack Rate: {AttackRate}\n" +
-               $"- Speed: {Speed}\n" +
+               $"- HP: {Mathf.RoundToInt(HP)}\n" +
+               $"- Attack Power: {Mathf.RoundToInt(AttackPower)}\n" +
+               $"- Attack Rate: {Mathf.RoundToInt(AttackRate)}\n" +
+               $"- Speed: {Mathf.RoundToInt(Speed)}\n" +
                $"- Special Effect: {SpecialEffect}\n";
     }
 }

@@ -39,6 +39,9 @@ public class EnemyView : MonoBehaviour
         controller = EnemyController.CreateRandomEnemy();
         agent = GetComponent<NavMeshAgent>();
 
+        // Solo olvidaste poner que la velocidad del agente NavMesh fuera igual a la del Model
+        agent.speed = controller.GetEnemyStats().Speed;
+
         currentFunctionVersion = Random.Range(1, 6); // Selecciona una función aleatoria entre 1 y 5
 
         if (enemyType == EnemyType.Podadora)
@@ -58,19 +61,21 @@ public class EnemyView : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha4)) ChangeDifficultyFunction(4);
         if (Input.GetKeyDown(KeyCode.Alpha5)) ChangeDifficultyFunction(5);
 
+        float detectionRange = controller.GetEnemyStats().DetectionRange;
+
         switch (enemyType)
         {
             case EnemyType.Escapista:
 
                 float distancia = Vector3.Distance(player.position, transform.position);
 
-                if (distancia < controller.GetEnemyStats().DetectionRange)
+                if (distancia < detectionRange)
                 {
                     Vector3 escapeDirection = (transform.position - player.position).normalized;
-                    Vector3 escapeDestination = transform.position + escapeDirection * 5f;
+                    Vector3 escapeDestination = transform.position + escapeDirection * detectionRange;
 
                     NavMeshHit hit;
-                    if (NavMesh.SamplePosition(escapeDestination, out hit, 5f, NavMesh.AllAreas))
+                    if (NavMesh.SamplePosition(escapeDestination, out hit, detectionRange, NavMesh.AllAreas))
                     {
                         agent.SetDestination(hit.position);
                     }
