@@ -13,6 +13,8 @@ public class EnemyModel
     public float Speed;
     public string SpecialEffect; // Efectos especiales
 
+    public float DetectionRange { get; private set; }
+
     // Se declara al array como static para ahorrar memoria porque no se necesita
     // Crear una copia para cada enemigo. Si no quisieramos que se ediara en el código,
     // se le puede añadir un readonly como propiedad al array.
@@ -21,13 +23,14 @@ public class EnemyModel
     /// <summary>
     /// Almacenamos las variables para las estadísticas de los enemigos
     /// </summary>
-    public EnemyModel(float hp, float attackPower, float attackRate, float speed, string specialEffect)
+    public EnemyModel(float hp, float attackPower, float attackRate, float speed, string specialEffect, float detectionRange)
     {
         HP = hp;
         AttackPower = attackPower;
         AttackRate = attackRate;
         Speed = speed;
         SpecialEffect = specialEffect;
+        DetectionRange = detectionRange;
     }
 
     /// <summary>
@@ -76,7 +79,8 @@ public class EnemyModel
             Random.Range(5f, 20f),
             Random.Range(0.5f, 3f),
             Random.Range(1f, 10f),
-            PossibleEffects[Random.Range(0, PossibleEffects.Length)] // Efecto aleatorio
+            PossibleEffects[Random.Range(0, PossibleEffects.Length)],// Efecto aleatorio
+            Random.Range(5f, 15f)
         );
     }
 
