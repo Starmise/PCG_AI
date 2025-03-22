@@ -109,6 +109,11 @@ public class EnemyView : MonoBehaviour
             enemyStatsTxt.text = stats;
 
         if (difficulty_txt != null)
-            difficulty_txt.text = "Dificultad: " + Mathf.RoundToInt(difficulty); // Sin decimales
+            difficulty_txt.text = "Difficulty: " + Mathf.RoundToInt(difficulty); // Sin decimales
+
+        // Obtener las estadisticas y mostrarlas en consola
+        Debug.Log(stats);
+        Debug.Log("Dificultad del enemigo: " + difficulty);
+        Debug.Log("FF usada: " + currentFunctionVersion);
     }
 }
