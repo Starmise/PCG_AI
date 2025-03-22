@@ -2,6 +2,7 @@ using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
+using UnityEngine.AI;
 
 /// <summary>
 /// En MVC, View no es como nos habían dicho de que era solo para UI, View es ya tal cual
@@ -14,6 +15,17 @@ public class EnemyView : MonoBehaviour
     public TMP_Text enemyStatsTxt;
     public TMP_Text difficulty_txt;
 
+    private NavMeshAgent agent;
+    public Transform player;
+
+    // Variables para el enemigo Podadora
+    public Transform puntoA;
+    public Transform puntoB;
+    private Vector3 destinoActual;
+
+    public enum EnemyType { Escapista, Agresivo, Podadora }
+    public EnemyType enemyType;
+
     private int currentFunctionVersion = 1; // Función inicial
 
     /// <summary>
@@ -25,31 +37,17 @@ public class EnemyView : MonoBehaviour
     void Start()
     {
         controller = EnemyController.CreateRandomEnemy();
+        agent = GetComponent<NavMeshAgent>();
+
         currentFunctionVersion = Random.Range(1, 6); // Selecciona una función aleatoria entre 1 y 5
+
+        if (enemyType == EnemyType.Podadora)
+        {
+            destinoActual = puntoA.position;
+            agent.SetDestination(destinoActual);
+        }
+
         UpdateUI();
-        /*
-         * Codigo original
-        // Obtener las estadísticas y mostrarlas en consola
-        string stats = controller.GetEnemyStats().ToString();
-        Debug.Log(stats);
-
-        float difficulty = controller.GetDifficulty(1);
-        Debug.Log("Dificultad del enemigo: " + difficulty);
-
-        // Debug.Log("Dificultad del enemigo: " + controller.GetDifficulty(1));
-
-        // Mostrar en la UI
-        if (enemyStatsTxt != null)
-        {
-            enemyStatsTxt.text = stats;
-        }
-
-        if (difficulty_txt != null)
-        {
-            int difficultyInt = (int)difficulty; // Corta los decimales
-            difficulty_txt.text = "Dificultad: " + difficultyInt;
-        }
-        */
     }
 
     void Update()
@@ -59,6 +57,36 @@ public class EnemyView : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha3)) ChangeDifficultyFunction(3);
         if (Input.GetKeyDown(KeyCode.Alpha4)) ChangeDifficultyFunction(4);
         if (Input.GetKeyDown(KeyCode.Alpha5)) ChangeDifficultyFunction(5);
+
+        switch (enemyType)
+        {
+            case EnemyType.Escapista:
+
+                float distancia = Vector3.Distance(player.position, transform.position);
+
+                if (distancia < controller.GetEnemyStats().DetectionRange)
+                {
+                    Vector3 escapeDirection = (transform.position - player.position).normalized;
+                    Vector3 escapeDestination = transform.position + escapeDirection * 5f;
+
+                    NavMeshHit hit;
+                    if (NavMesh.SamplePosition(escapeDestination, out hit, 5f, NavMesh.AllAreas))
+                    {
+                        agent.SetDestination(hit.position);
+                    }
+                }
+                break;
+            case EnemyType.Agresivo:
+                agent.SetDestination(player.position);
+                break;
+            case EnemyType.Podadora:
+                if (!agent.pathPending && agent.remainingDistance < 0.5f)
+                {
+                    destinoActual = (destinoActual == puntoA.position) ? puntoB.position : puntoA.position;
+                    agent.SetDestination(destinoActual);
+                }
+                break;
+        }
     }
 
     void ChangeDifficultyFunction(int newFunctionVersion)

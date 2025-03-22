@@ -8,10 +8,21 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     private EnemyModel enemyStats;
+    private bool isEscapist = false; // Bandera para determinar si el enemigo es escapista
 
     public EnemyController(EnemyModel stats)
     {
         enemyStats = stats;
+    }
+
+    public void SwitchToEscapist(bool escapeMode)
+    {
+        isEscapist = escapeMode;
+    }
+
+    public bool IsEscapist()
+    {
+        return isEscapist;
     }
 
     /// <summary>
@@ -32,12 +43,23 @@ public class EnemyController : MonoBehaviour
         return new EnemyController(randomStats);
     }
 
+    public EnemyModel GetEnemyStats()
+    {
+        return enemyStats;
+    }
+
     // <summary>
     /// Este método regresa las estadísticas, pues las necesitaremos para poder mostrarlas.
     /// Por ahora se muestran en consola, pero el objetivo es que se vean en consola también.
     /// </summary>
-    public EnemyModel GetEnemyStats()
+    public bool ShouldEscape(Vector3 playerPosition, Vector3 enemyPosition)
     {
-        return enemyStats;
+        // Si es un Escapista, calcula si debe escapar
+        if (isEscapist)
+        {
+            float distance = Vector3.Distance(playerPosition, enemyPosition);
+            return distance < enemyStats.DetectionRange;
+        }
+        return false; // En otro caso no escapa
     }
 }
