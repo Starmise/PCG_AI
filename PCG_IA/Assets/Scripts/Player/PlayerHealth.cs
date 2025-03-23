@@ -24,5 +24,10 @@ public class PlayerHealth : MonoBehaviour
     private void ojosPesados()
     {
         Debug.Log("Tienes los ojos pesados...");
+        CanvasManager canvasManager = FindFirstObjectByType<CanvasManager>();
+        if (canvasManager != null)
+        {
+            canvasManager.deathScreen();
+        }
     }
 }

@@ -56,6 +56,10 @@ public class EnemyView : MonoBehaviour
             agent.SetDestination(destinoActual);
         }
 
+        // De momento vamos a instanciar un objeto diferente para cada efecto especial,
+        // por el poco tiempo disponible no podemos meter VFX, y sepa dios como se hacen.
+        HandleSpecialEffect();
+
         UpdateUI();
     }
 
@@ -132,6 +136,13 @@ public class EnemyView : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            // Ahora verificamos si el jugador está atacando para que Enemy no pueda hacerle daño
+            PlayerController playerController = other.GetComponent<PlayerController>();
+            if (playerController != null && playerController.isAttacking)
+            {
+                return;
+            }
+
             attackCooldown -= Time.deltaTime;
 
             if (attackCooldown <= 0)
@@ -143,10 +154,6 @@ public class EnemyView : MonoBehaviour
                     playerHealth.TakeDamage(controller.GetEnemyStats().AttackPower);
                 }
 
-                // De momento vamos a instanciar un objeto diferente para cada efecto especial,
-                // por el poco tiempo disponible no podemos meter VFX, y sepa dios como se hacen.
-                HandleSpecialEffect();
-
                 // Se reinicia el cooldown dependiendo del tiempo de ataque
                 attackCooldown = controller.GetEnemyStats().AttackRate;
             }
@@ -156,14 +163,16 @@ public class EnemyView : MonoBehaviour
     private void HandleSpecialEffect()
     {
         string effect = controller.GetEnemyStats().SpecialEffect;
-        //GameObject effectObject = null; // Variable para después hacer que los objetos se instancien como hijos
-
+        GameObject effectObject; // Variable para hacer que los objetos se instancien como hijos
+        Vector3 spawnPosition = new Vector3(transform.position.x, 2.3f, transform.position.z); // Como quiero que se inicie 2.3f en y, se hace esto
+        Debug.Log("Instanciando objeto: " + effect);
         switch (effect)
         {
             case "Poison":
                 if (objectPoison != null)
                 {
-                    Instantiate(objectPoison, transform.position, Quaternion.identity);
+                    effectObject = Instantiate(objectPoison, spawnPosition, Quaternion.identity); // transform.position serviría si no quisieramos personalizarlo.
+                    effectObject.transform.SetParent(transform);
                 }
                 else Debug.LogWarning("Olvidaste asignar el objectPoison");
                 break;
@@ -171,7 +180,8 @@ public class EnemyView : MonoBehaviour
             case "Burn":
                 if (objectBurn != null)
                 {
-                    Instantiate(objectBurn, transform.position, Quaternion.identity);
+                    effectObject = Instantiate(objectBurn, spawnPosition, Quaternion.identity);
+                    effectObject.transform.SetParent(transform);
                 }
                 else Debug.LogWarning("Olvidaste asignar el objectBurn");
                 break;
@@ -179,7 +189,8 @@ public class EnemyView : MonoBehaviour
             case "Shock":
                 if (objectShock != null)
                 {
-                    Instantiate(objectShock, transform.position, Quaternion.identity);
+                    effectObject = Instantiate(objectShock, spawnPosition, Quaternion.identity);
+                    effectObject.transform.SetParent(transform);
                 }
                 else Debug.LogWarning("Olvidaste asignar el objectShock");
                 break;
@@ -188,6 +199,30 @@ public class EnemyView : MonoBehaviour
                 // Lol osea, oh my god, en plan holy shit, no hay más efectos y none pues es nada.
                 break;
         }
+    }
+
+    /// <summary>
+    /// Reduce la vida del enemigo cuando recibe daño.
+    /// </summary>
+    public void TakeDamage(float damageAmount)
+    {
+        controller.GetEnemyStats().HP -= damageAmount;
+        Debug.Log($"Enemy HP: {controller.GetEnemyStats().HP}");
+
+        // Verificar si el enemigo muere
+        if (controller.GetEnemyStats().HP <= 0)
+        {
+            EnemyDeath();
+        }
+    }
+
+    /// <summary>
+    /// Lógica de cuando se mata al enemigo
+    /// </summary>
+    private void EnemyDeath()
+    {
+        Debug.Log("La sombra ha sido derrotada");
+        Destroy(gameObject);
     }
 
 
