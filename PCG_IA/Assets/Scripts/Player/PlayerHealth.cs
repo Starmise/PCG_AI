@@ -5,6 +5,8 @@ public class PlayerHealth : MonoBehaviour
     public float maxHealth = 100f;
     private float currentHealth;
 
+    public bool immortal = false;
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -17,7 +19,15 @@ public class PlayerHealth : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            ojosPesados();
+            if (immortal)
+            {
+                //currentHealth = 0; // No muere, pero la salud se queda en 0
+                Debug.Log("El jugador es inmortal y no puede morir.");
+            }
+            else
+            {
+                ojosPesados();
+            }
         }
     }
 

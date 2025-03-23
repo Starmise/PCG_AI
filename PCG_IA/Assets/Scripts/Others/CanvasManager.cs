@@ -30,4 +30,16 @@ public class CanvasManager : MonoBehaviour
     {
         deathUI.SetActive(true);
     }
+
+    public void ToggleImmortality()
+    {
+        PlayerHealth playerHealth = FindFirstObjectByType<PlayerHealth>();
+        if (playerHealth.immortal == false)
+        {
+            playerHealth.immortal = true;
+        }
+        else playerHealth.immortal = false;
+
+        Debug.Log("Inmortalidad: " + (playerHealth.immortal ? "Activada" : "Desactivada")); // Te quiero mucho operador ternario
+    }
 }
