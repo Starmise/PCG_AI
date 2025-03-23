@@ -46,11 +46,12 @@ public class EnemyModel
             case 2:
                 return (HP * Speed) + (AttackPower / AttackRate) + GetEffectValue();
             case 3:
-                return (HP + AttackPower) * (1.0f / AttackRate) + (Speed > 1.5f ? 25 : 10);
+                return HP + (AttackPower / AttackRate) + (Speed > 5f ? 25 : 10) + GetEffectValue();
             case 4:
-                return (HP + GetEffectValue()) * (AttackPower / AttackRate) + (Speed > 1.5f ? 15 : 5);
+                return HP * 0.5f + (AttackPower * AttackRate) + GetEffectValue() + (Speed > 4f ? 20 : 10) + DetectionRange * 0.5f;
             case 5:
-                return HP + ((AttackPower * AttackRate) + GetEffectValue()) + (Speed > 4f ? 10 : 5);
+                return HP * 0.33f + (AttackPower * AttackRate * 0.75f) + GetEffectValue() 
+                       + (Speed > 4f ? 15 : 5) + (DetectionRange * 0.33f);
             default:
                 Debug.LogError("El valor asignado a la Fitness Function no es válido");
                 return 0;
