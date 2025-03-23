@@ -48,6 +48,14 @@ public class EnemyView : MonoBehaviour
         // Solo olvidaste poner que la velocidad del agente NavMesh fuera igual a la del Model
         agent.speed = controller.GetEnemyStats().Speed;
 
+        // Asignar un tipo de enemigo aleatorio si no ha sido definido manualmente en el Inspector
+        if (!Application.isEditor || enemyType == default)
+        {
+            enemyType = (EnemyType)Random.Range(0, System.Enum.GetValues(typeof(EnemyType)).Length);
+        }
+
+        Debug.Log("Enemigo generado: " + enemyType);
+
         currentFunctionVersion = Random.Range(1, 6); // Selecciona una función aleatoria entre 1 y 5
 
         if (enemyType == EnemyType.Podadora)
@@ -65,6 +73,7 @@ public class EnemyView : MonoBehaviour
 
     void Update()
     {
+        // Cambiar la dificultad con los números del teclado.
         if (Input.GetKeyDown(KeyCode.Alpha1)) ChangeDifficultyFunction(1);
         if (Input.GetKeyDown(KeyCode.Alpha2)) ChangeDifficultyFunction(2);
         if (Input.GetKeyDown(KeyCode.Alpha3)) ChangeDifficultyFunction(3);
@@ -73,6 +82,7 @@ public class EnemyView : MonoBehaviour
 
         float detectionRange = controller.GetEnemyStats().DetectionRange;
 
+        // Cambiar el comportamiento del enemigo dependiendo de su tipo desde el inspector.
         switch (enemyType)
         {
             case EnemyType.Escapista:
