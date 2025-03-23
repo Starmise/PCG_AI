@@ -1136,6 +1136,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9e6eb380d5d8b994bac5c0b17e7bea8e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9e6eb380d5d8b994bac5c0b17e7bea8e, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 977145165023112927, guid: 9e6eb380d5d8b994bac5c0b17e7bea8e, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -2033,6 +2041,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9e6eb380d5d8b994bac5c0b17e7bea8e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8299451065627128658}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9e6eb380d5d8b994bac5c0b17e7bea8e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6036080247700549177}
     - targetCorrespondingSourceObject: {fileID: 3918031001195526978, guid: 9e6eb380d5d8b994bac5c0b17e7bea8e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7389279930231721022}
@@ -2200,6 +2211,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
+  attackDamage: 15
+  isAttacking: 0
 --- !u!54 &9060876946181756636
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2250,3 +2263,17 @@ CapsuleCollider:
   m_Height: 1.6
   m_Direction: 1
   m_Center: {x: 0, y: 0.8, z: 0}
+--- !u!114 &6036080247700549177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8746388867851673725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b04f193589591f42929f52937caa38f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  immortal: 0

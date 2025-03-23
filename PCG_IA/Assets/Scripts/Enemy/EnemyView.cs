@@ -11,21 +11,27 @@ using UnityEngine.AI;
 /// </summary>
 public class EnemyView : MonoBehaviour
 {
-    private EnemyController controller;
+    [Header("UI")]
     public TMP_Text enemyStatsTxt;
     public TMP_Text difficulty_txt;
 
-    private NavMeshAgent agent;
+    [Header("Movement")]
     public Transform player;
-
     // Variables para el enemigo Podadora
     public Transform puntoA;
     public Transform puntoB;
-    private Vector3 destinoActual;
-
     public enum EnemyType { Escapista, Agresivo, Podadora }
     public EnemyType enemyType;
 
+    [Header("EffectsObjects")]
+    public GameObject objectPoison;
+    public GameObject objectBurn;
+    public GameObject objectShock;
+
+    private EnemyController controller;
+    private NavMeshAgent agent;
+    private Vector3 destinoActual;
+    private float attackCooldown = 0f;
     private int currentFunctionVersion = 1; // Función inicial
 
     /// <summary>
@@ -49,6 +55,10 @@ public class EnemyView : MonoBehaviour
             destinoActual = puntoA.position;
             agent.SetDestination(destinoActual);
         }
+
+        // De momento vamos a instanciar un objeto diferente para cada efecto especial,
+        // por el poco tiempo disponible no podemos meter VFX, y sepa dios como se hacen.
+        HandleSpecialEffect();
 
         UpdateUI();
     }
@@ -116,4 +126,104 @@ public class EnemyView : MonoBehaviour
         Debug.Log("Dificultad del enemigo: " + difficulty);
         Debug.Log("FF usada: " + currentFunctionVersion);
     }
+
+    /// <summary>
+    /// Ok Lucio, ya se que a ti no te gusta documentarme tu código, pero yo no soy asi.
+    /// De momento probaré con OnTriggerStay, es decir, mientras el enemigo esté dentro del
+    /// trigger del juagdor, este aplicará daño
+    /// </summary>
+    void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            // Ahora verificamos si el jugador está atacando para que Enemy no pueda hacerle daño
+            PlayerController playerController = other.GetComponent<PlayerController>();
+            if (playerController != null && playerController.isAttacking)
+            {
+                return;
+            }
+
+            attackCooldown -= Time.deltaTime;
+
+            if (attackCooldown <= 0)
+            {
+                // Atacamos al jugador accediendo al nuevo script de la vida del jugador.
+                PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+                if (playerHealth != null)
+                {
+                    playerHealth.TakeDamage(controller.GetEnemyStats().AttackPower);
+                }
+
+                // Se reinicia el cooldown dependiendo del tiempo de ataque
+                attackCooldown = controller.GetEnemyStats().AttackRate;
+            }
+        }
+    }
+
+    private void HandleSpecialEffect()
+    {
+        string effect = controller.GetEnemyStats().SpecialEffect;
+        GameObject effectObject; // Variable para hacer que los objetos se instancien como hijos
+        Vector3 spawnPosition = new Vector3(transform.position.x, 2.3f, transform.position.z); // Como quiero que se inicie 2.3f en y, se hace esto
+        Debug.Log("Instanciando objeto: " + effect);
+        switch (effect)
+        {
+            case "Poison":
+                if (objectPoison != null)
+                {
+                    effectObject = Instantiate(objectPoison, spawnPosition, Quaternion.identity); // transform.position serviría si no quisieramos personalizarlo.
+                    effectObject.transform.SetParent(transform);
+                }
+                else Debug.LogWarning("Olvidaste asignar el objectPoison");
+                break;
+
+            case "Burn":
+                if (objectBurn != null)
+                {
+                    effectObject = Instantiate(objectBurn, spawnPosition, Quaternion.identity);
+                    effectObject.transform.SetParent(transform);
+                }
+                else Debug.LogWarning("Olvidaste asignar el objectBurn");
+                break;
+
+            case "Shock":
+                if (objectShock != null)
+                {
+                    effectObject = Instantiate(objectShock, spawnPosition, Quaternion.identity);
+                    effectObject.transform.SetParent(transform);
+                }
+                else Debug.LogWarning("Olvidaste asignar el objectShock");
+                break;
+
+            default:
+                // Lol osea, oh my god, en plan holy shit, no hay más efectos y none pues es nada.
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Reduce la vida del enemigo cuando recibe daño.
+    /// </summary>
+    public void TakeDamage(float damageAmount)
+    {
+        controller.GetEnemyStats().HP -= damageAmount;
+        Debug.Log($"Enemy HP: {controller.GetEnemyStats().HP}");
+
+        // Verificar si el enemigo muere
+        if (controller.GetEnemyStats().HP <= 0)
+        {
+            EnemyDeath();
+        }
+    }
+
+    /// <summary>
+    /// Lógica de cuando se mata al enemigo
+    /// </summary>
+    private void EnemyDeath()
+    {
+        Debug.Log("La sombra ha sido derrotada");
+        Destroy(gameObject);
+    }
+
+
 }

@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -5,6 +6,7 @@ public class PlayerController : MonoBehaviour
     // Variables numéricas
     public float moveSpeed = 5f; // Velocidad del personaje
     private Vector3 moveDirection; // Dirección a la que se mueve el personaje
+    public float attackDamage = 10f;
 
     private float nextFireTime = 0f;
     public static int numClicks = 0;
@@ -12,6 +14,7 @@ public class PlayerController : MonoBehaviour
     private float maxComboDelay = 1;
 
     // Booleanos
+    public bool isAttacking;
 
     // Referencias
     private Rigidbody rb;
@@ -30,6 +33,13 @@ public class PlayerController : MonoBehaviour
     {
         HandleMovementInput();
         HandleAttackLogic();
+
+        // Había olvidado desactivar el estado de ataque xd
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        if (stateInfo.normalizedTime > 0.2f && (stateInfo.IsName("Idle") || stateInfo.IsName("Standard Run")))
+        {
+            isAttacking = false;
+        }
     }
 
     /// <summary>
@@ -105,6 +115,7 @@ public class PlayerController : MonoBehaviour
         lastClickedTime = Time.time;
         numClicks++;
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        isAttacking = true;
 
         if (numClicks == 1)
         {
@@ -119,6 +130,24 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("Attack2", false);
             animator.SetBool("Attack3", true);
+        }
+    }
+
+    /// <summary>
+    /// Detecta colisiones con los enemigos para golpearlos a puño limpio. 
+    /// A diferencia de Enemy, el jugador detecta la colisión en cuanto 
+    /// se entre en contacto, NO mientras esté en contacto con el otro objeto.
+    /// Se llama al método de TakeDamage para dañar el enemigo.
+    /// </summary>
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy") && isAttacking)
+        {
+            EnemyView enemyView = other.GetComponent<EnemyView>();
+            if (enemyView != null)
+            {
+                enemyView.TakeDamage(attackDamage);
+            }
         }
     }
 }

@@ -18,7 +18,7 @@ public class EnemyModel
     // Se declara al array como static para ahorrar memoria porque no se necesita
     // Crear una copia para cada enemigo. Si no quisieramos que se ediara en el código,
     // se le puede añadir un readonly como propiedad al array.
-    private static string[] PossibleEffects = { "Poison", "Burn", "Shcok", "None" };
+    private static string[] PossibleEffects = { "Poison", "Burn", "Shock", "None" };
 
     /// <summary>
     /// Almacenamos las variables para las estadísticas de los enemigos

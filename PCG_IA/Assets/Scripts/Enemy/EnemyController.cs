@@ -5,7 +5,7 @@ using UnityEngine;
 /// no es como los controller que usualmente manejamos que contienen toda la lógica
 /// de funcionamiento del objeto al que corresponden
 /// </summary>
-public class EnemyController : MonoBehaviour
+public class EnemyController
 {
     private EnemyModel enemyStats;
     private bool isEscapist = false; // Bandera para determinar si el enemigo es escapista
