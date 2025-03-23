@@ -135,6 +135,8 @@ public class EnemyView : MonoBehaviour
         Debug.Log(stats);
         Debug.Log("Dificultad del enemigo: " + difficulty);
         Debug.Log("FF usada: " + currentFunctionVersion);
+
+        UpdateColor(difficulty);
     }
 
     /// <summary>
@@ -167,6 +169,43 @@ public class EnemyView : MonoBehaviour
                 // Se reinicia el cooldown dependiendo del tiempo de ataque
                 attackCooldown = controller.GetEnemyStats().AttackRate;
             }
+        }
+    }
+
+    void UpdateColor(float difficulty)
+    {
+        float[] maxDifficulties = { 247.5f, 255.5f, 272.5f, 175f, 123.45f };
+
+        if (currentFunctionVersion < 1 || currentFunctionVersion > maxDifficulties.Length)
+        {
+            Debug.LogError("Número de función fuera de rango.");
+            return;
+        }
+
+        float maxDifficulty = maxDifficulties[currentFunctionVersion - 1];
+
+        // Umbrales según el porcentaje
+        float threshold1 = maxDifficulty * 0.33f;
+        float threshold2 = maxDifficulty * 0.66f;
+
+        Color newColor;
+        if (difficulty < threshold1)
+            newColor = Color.blue;
+        else if (difficulty < threshold2)
+            newColor = Color.yellow;
+        else
+            newColor = Color.red;
+
+        // Buscar el Renderer en el objeto o en sus hijos
+        Renderer enemyRenderer = GetComponentInChildren<Renderer>();
+
+        if (enemyRenderer != null)
+        {
+            enemyRenderer.material.color = newColor;
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró un Renderer en el enemigo.");
         }
     }
 
