@@ -13,7 +13,7 @@ public class DestroyableObject : MonoBehaviour
     /// </summary>
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("OnTriggerEnter llamado con: " + other.name);
+        // Debug.Log("OnTriggerEnter llamado con: " + other.name);
         // Verificar si el objeto que golpea pertenece al jugador
         GameObject rootObject = other.transform.root.gameObject;
 
