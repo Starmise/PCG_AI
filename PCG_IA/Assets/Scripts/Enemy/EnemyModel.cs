@@ -13,6 +13,10 @@ public class EnemyModel
     public float Speed;
     public string SpecialEffect; // Efectos especiales
 
+    [Header("Magic Numbers")]
+    public int minSpeedDiff = 15;
+    public int maxSpeedDiff = 5;
+
     public float DetectionRange { get; private set; }
 
     // Se declara al array como static para ahorrar memoria porque no se necesita
@@ -46,13 +50,13 @@ public class EnemyModel
             case 2:
                 return (HP + Speed) + (AttackPower / AttackRate) + GetEffectValue();
             case 3:
-                return HP + (AttackPower / AttackRate) + (Speed > 5f ? 25 : 10) + GetEffectValue();
+                return HP + (AttackPower / AttackRate) + (Speed > 5f ? maxSpeedDiff : minSpeedDiff) + GetEffectValue();
             case 4:
                 return HP * 0.5f + (AttackPower * AttackRate) + GetEffectValue() 
-                       + (Speed > 4f ? 20 : 10) + DetectionRange * 0.5f;
+                       + (Speed > 4f ? maxSpeedDiff : minSpeedDiff) + DetectionRange * 0.5f;
             case 5:
                 return HP * 0.33f + (AttackPower * AttackRate * 0.75f) + GetEffectValue() 
-                       + (Speed > 4f ? 15 : 5) + (DetectionRange * 0.33f);
+                       + (Speed > 4f ? maxSpeedDiff : minSpeedDiff) + (DetectionRange * 0.33f);
             default:
                 Debug.LogError("El valor asignado a la Fitness Function no es válido");
                 return 0;
