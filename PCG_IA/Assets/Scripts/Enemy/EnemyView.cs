@@ -1,12 +1,12 @@
-using TMPro;
+Ôªøusing TMPro;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.AI;
 
 /// <summary>
-/// En MVC, View no es como nos habÌan dicho de que era solo para UI, View es ya tal cual
-/// la lÛgica de lo que el elemnto har· en Unity, como crearse, moverse, sus usos,
+/// En MVC, View no es como nos hab√≠an dicho de que era solo para UI, View es ya tal cual
+/// la l√≥gica de lo que el elemnto har√° en Unity, como crearse, moverse, sus usos,
 /// sus eventos, etc.
 /// </summary>
 public class EnemyView : MonoBehaviour
@@ -32,12 +32,12 @@ public class EnemyView : MonoBehaviour
     private NavMeshAgent agent;
     private Vector3 destinoActual;
     private float attackCooldown = 0f;
-    private int currentFunctionVersion = 1; // FunciÛn inicial
+    private int currentFunctionVersion = 1; // Funci√≥n inicial
 
     /// <summary>
-    /// Ac· ya se crea (al menos en teorÌa lÛgica) el enemigo,con valores que ya aleatorios.
-    /// De momento nadam·s indicamos que se devuelve como dificultad 1 en predeterminado, 
-    /// que en este caso serÌa la Fitness Function 1, ya en el futuro lo hago controlable
+    /// Ac√° ya se crea (al menos en teor√≠a l√≥gica) el enemigo,con valores que ya aleatorios.
+    /// De momento nadam√°s indicamos que se devuelve como dificultad 1 en predeterminado, 
+    /// que en este caso ser√≠a la Fitness Function 1, ya en el futuro lo hago controlable
     /// desde el inspector como se pide.
     /// </summary>
     void Start()
@@ -56,7 +56,7 @@ public class EnemyView : MonoBehaviour
 
         Debug.Log("Enemigo generado: " + enemyType);
 
-        currentFunctionVersion = Random.Range(1, 6); // Selecciona una funciÛn aleatoria entre 1 y 5
+        currentFunctionVersion = Random.Range(1, 6); // Selecciona una funci√≥n aleatoria entre 1 y 5
 
         if (enemyType == EnemyType.Podadora)
         {
@@ -73,7 +73,7 @@ public class EnemyView : MonoBehaviour
 
     void Update()
     {
-        // Cambiar la dificultad con los n˙meros del teclado.
+        // Cambiar la dificultad con los n√∫meros del teclado.
         if (Input.GetKeyDown(KeyCode.Alpha1)) ChangeDifficultyFunction(1);
         if (Input.GetKeyDown(KeyCode.Alpha2)) ChangeDifficultyFunction(2);
         if (Input.GetKeyDown(KeyCode.Alpha3)) ChangeDifficultyFunction(3);
@@ -124,6 +124,10 @@ public class EnemyView : MonoBehaviour
     {
         string stats = controller.GetEnemyStats().ToString();
         float difficulty = controller.GetDifficulty(currentFunctionVersion);
+        int binaryMovement = GetMovementTypeAsNumber();
+        // Mostrar el tipo de movimiento binario
+
+        
 
         if (enemyStatsTxt != null)
             enemyStatsTxt.text = stats;
@@ -131,24 +135,28 @@ public class EnemyView : MonoBehaviour
         if (difficulty_txt != null)
             difficulty_txt.text = "Difficulty: " + Mathf.RoundToInt(difficulty); // Sin decimales
 
+        if (enemyStatsTxt != null)
+            enemyStatsTxt.text += $"- Patr√≥n de Movimiento: {binaryMovement}";
+
         // Obtener las estadisticas y mostrarlas en consola
         Debug.Log(stats);
         Debug.Log("Dificultad del enemigo: " + difficulty);
         Debug.Log("FF usada: " + currentFunctionVersion);
+        Debug.Log("Patr√≥n de movimiento (binario): " + binaryMovement);
 
         UpdateColor(difficulty);
     }
 
     /// <summary>
-    /// Ok Lucio, ya se que a ti no te gusta documentarme tu cÛdigo, pero yo no soy asi.
-    /// De momento probarÈ con OnTriggerStay, es decir, mientras el enemigo estÈ dentro del
-    /// trigger del juagdor, este aplicar· daÒo
+    /// Ok Lucio, ya se que a ti no te gusta documentarme tu c√≥digo, pero yo no soy asi.
+    /// De momento probar√© con OnTriggerStay, es decir, mientras el enemigo est√© dentro del
+    /// trigger del juagdor, este aplicar√° da√±o
     /// </summary>
     void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            // Ahora verificamos si el jugador est· atacando para que Enemy no pueda hacerle daÒo
+            // Ahora verificamos si el jugador est√° atacando para que Enemy no pueda hacerle da√±o
             PlayerController playerController = other.GetComponent<PlayerController>();
             if (playerController != null && playerController.isAttacking)
             {
@@ -178,13 +186,13 @@ public class EnemyView : MonoBehaviour
 
         if (currentFunctionVersion < 1 || currentFunctionVersion > maxDifficulties.Length)
         {
-            Debug.LogError("N˙mero de funciÛn fuera de rango.");
+            Debug.LogError("N√∫mero de funci√≥n fuera de rango.");
             return;
         }
 
         float maxDifficulty = maxDifficulties[currentFunctionVersion - 1];
 
-        // Umbrales seg˙n el porcentaje
+        // Umbrales seg√∫n el porcentaje
         float threshold1 = maxDifficulty * 0.33f;
         float threshold2 = maxDifficulty * 0.66f;
 
@@ -205,7 +213,7 @@ public class EnemyView : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("No se encontrÛ un Renderer en el enemigo.");
+            Debug.LogWarning("No se encontr√≥ un Renderer en el enemigo.");
         }
     }
 
@@ -220,7 +228,7 @@ public class EnemyView : MonoBehaviour
             case "Poison":
                 if (objectPoison != null)
                 {
-                    effectObject = Instantiate(objectPoison, spawnPosition, Quaternion.identity); // transform.position servirÌa si no quisieramos personalizarlo.
+                    effectObject = Instantiate(objectPoison, spawnPosition, Quaternion.identity); // transform.position servir√≠a si no quisieramos personalizarlo.
                     effectObject.transform.SetParent(transform);
                 }
                 else Debug.LogWarning("Olvidaste asignar el objectPoison");
@@ -245,13 +253,13 @@ public class EnemyView : MonoBehaviour
                 break;
 
             default:
-                // Lol osea, oh my god, en plan holy shit, no hay m·s efectos y none pues es nada.
+                // Lol osea, oh my god, en plan holy shit, no hay m√°s efectos y none pues es nada.
                 break;
         }
     }
 
     /// <summary>
-    /// Reduce la vida del enemigo cuando recibe daÒo.
+    /// Reduce la vida del enemigo cuando recibe da√±o.
     /// </summary>
     public void TakeDamage(float damageAmount)
     {
@@ -264,9 +272,20 @@ public class EnemyView : MonoBehaviour
             EnemyDeath();
         }
     }
+    // Aqui se normalizan el tipo de enemigos
+    private int GetMovementTypeAsNumber()
+    {
+        switch (enemyType)
+        {
+            case EnemyType.Escapista: return 0;
+            case EnemyType.Agresivo: return 1;
+            case EnemyType.Podadora: return 2;
+            default: return -1;
+        }
+    }
 
     /// <summary>
-    /// LÛgica de cuando se mata al enemigo
+    /// L√≥gica de cuando se mata al enemigo
     /// </summary>
     private void EnemyDeath()
     {
