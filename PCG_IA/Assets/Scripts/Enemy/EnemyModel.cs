@@ -63,26 +63,25 @@ public class EnemyModel
         float normAttackPower = Normalize(AttackPower, 5f, 20f);
         float normAttackRate = Normalize(AttackRate, 0.5f, 2f);
         float normSpeed = Normalize(Speed, 1f, 8f);
-        float normEffectValue = Normalize(GetEffectValue(), 0f, 50f);
-        float normEffectBinary = Normalize(GetEffectBinary(), 0f, 1f);
         float normDetectionRange = Normalize(DetectionRange, 5f, 15f);
         float normMaxSpeedDiff = Normalize(maxSpeedDiff, 1f, 5f);
         float normMinSpeedDiff = Normalize(minSpeedDiff, 0f, 1f);
+        float normSpeedDiff = (Speed > 4f) ? normMaxSpeedDiff : normMinSpeedDiff;
 
         switch (functionVersion)
         {
             case 1:
-                return normHP + normAttackPower * (1.0f / Mathf.Max(normAttackRate, 0.01f)) + normEffectValue + normEffectBinary;
+                return normHP + normAttackPower * (1.0f / Mathf.Max(normAttackRate, 0.01f)) + GetEffectBinary();
             case 2:
-                return (normHP + normSpeed) + (normAttackPower / Mathf.Max(normAttackRate, 0.01f)) + normEffectValue + normEffectBinary;
+                return (normHP + normSpeed) + (normAttackPower / Mathf.Max(normAttackRate, 0.01f)) + GetEffectBinary();
             case 3:
-                return normHP + (normAttackPower / Mathf.Max(normAttackRate, 0.01f)) + ((Speed > 5f) ? normMaxSpeedDiff : normMinSpeedDiff) + normEffectValue + normEffectBinary;
+                return normHP + (normAttackPower / Mathf.Max(normAttackRate, 0.01f)) + normSpeedDiff + GetEffectBinary();
             case 4:
-                return normHP * 0.5f + (normAttackPower * normAttackRate) + normEffectValue + normEffectBinary
-                       + ((Speed > 4f) ? normMaxSpeedDiff : normMinSpeedDiff) + normDetectionRange * 0.5f;
+                return normHP * 0.5f + (normAttackPower * normAttackRate) + GetEffectBinary()
+                       + normSpeedDiff + normDetectionRange * 0.5f;
             case 5:
-                return normHP * 0.33f + (normAttackPower * normAttackRate * 0.75f) + normEffectValue + normEffectBinary
-                       + ((Speed > 4f) ? normMaxSpeedDiff : normMinSpeedDiff) + normDetectionRange * 0.33f;
+                return normHP * 0.33f + (normAttackPower * normAttackRate * 0.75f) + GetEffectBinary()
+                       + normSpeedDiff + normDetectionRange * 0.33f;
             default:
                 Debug.LogError("El valor asignado a la Fitness Function no es válido");
                 return 0;
