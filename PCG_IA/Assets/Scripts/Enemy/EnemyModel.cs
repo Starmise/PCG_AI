@@ -17,6 +17,12 @@ public class EnemyModel
     public int minSpeedDiff = 15;
     public int maxSpeedDiff = 5;
 
+    // Propiedades binarizadas de efectos especiales
+    public int HasPoison => SpecialEffect == "Poison" ? 1 : 0;
+    public int HasBurn => SpecialEffect == "Burn" ? 1 : 0;
+    public int HasShock => SpecialEffect == "Shock" ? 1 : 0;
+    public int HasEffect => SpecialEffect != "None" ? 1 : 0; // General
+
     public float DetectionRange { get; private set; }
 
     // Se declara al array como static para ahorrar memoria porque no se necesita
@@ -46,16 +52,16 @@ public class EnemyModel
         switch (functionVersion)
         {
             case 1:
-                return HP + AttackPower * (1.0f / AttackRate) + GetEffectValue();
+                return HP + AttackPower * (1.0f / AttackRate) + GetEffectValue() + GetEffectBinary();
             case 2:
-                return (HP + Speed) + (AttackPower / AttackRate) + GetEffectValue();
+                return (HP + Speed) + (AttackPower / AttackRate) + GetEffectValue() + GetEffectBinary();
             case 3:
-                return HP + (AttackPower / AttackRate) + (Speed > 5f ? maxSpeedDiff : minSpeedDiff) + GetEffectValue();
+                return HP + (AttackPower / AttackRate) + (Speed > 5f ? maxSpeedDiff : minSpeedDiff) + GetEffectValue() + GetEffectBinary();
             case 4:
-                return HP * 0.5f + (AttackPower * AttackRate) + GetEffectValue() 
+                return HP * 0.5f + (AttackPower * AttackRate) + GetEffectValue() + GetEffectBinary()
                        + (Speed > 4f ? maxSpeedDiff : minSpeedDiff) + DetectionRange * 0.5f;
             case 5:
-                return HP * 0.33f + (AttackPower * AttackRate * 0.75f) + GetEffectValue() 
+                return HP * 0.33f + (AttackPower * AttackRate * 0.75f) + GetEffectValue() + GetEffectBinary()
                        + (Speed > 4f ? maxSpeedDiff : minSpeedDiff) + (DetectionRange * 0.33f);
             default:
                 Debug.LogError("El valor asignado a la Fitness Function no es válido");
@@ -74,6 +80,12 @@ public class EnemyModel
         return 0;
     }
 
+    // Nuevo método binario
+    private float GetEffectBinary()
+    {
+        return HasEffect;
+    }
+
     /// <summary>
     /// Acá establecemos los rangos para obtener un valor aleatorio de cada estadística
     /// que tienen los enemigos.
@@ -90,7 +102,6 @@ public class EnemyModel
         );
     }
 
-
     /// <summary>
     /// No sabía, pero se puede crear un método ToString que contenga la información a mostrar, 
     /// sin necesidad de ir escribiendolo nuevamente cada que sea necesario. También,
@@ -104,6 +115,6 @@ public class EnemyModel
                $"- Attack: {Mathf.RoundToInt(AttackPower)}\n" +
                $"- Attack Rate: {Mathf.RoundToInt(AttackRate)}\n" +
                $"- Speed: {Mathf.RoundToInt(Speed)}\n" +
-               $"- Special Effect: {SpecialEffect}\n";
+               $"- Special Effect: {SpecialEffect} (Binary: {HasEffect})\n";
     }
 }
