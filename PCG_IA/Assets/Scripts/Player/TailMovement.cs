@@ -17,7 +17,7 @@ public class TailMovement : MonoBehaviour
         {
             // Obtiene todos los hijos del objeto que encuentre con el nombre, que es el hueso raíz
             tailBones = tailRoot.GetComponentsInChildren<Transform>();
-            Debug.Log($"Huesos de la cola encontrados: {tailBones.Length}");
+            //Debug.Log($"Huesos de la cola encontrados: {tailBones.Length}");
         }
         else
         {

@@ -1,5 +1,4 @@
 ﻿using TMPro;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.AI;
@@ -27,6 +26,11 @@ public class EnemyView : MonoBehaviour
     public GameObject objectPoison;
     public GameObject objectBurn;
     public GameObject objectShock;
+
+    [Header("Weight Score")]
+    [Range(0f, 1f)]
+    public float difficultyWeight = 0.5f; // En sí es el único que modifica
+    public float balanceWeight => 1f - difficultyWeight;
 
     private EnemyController controller;
     private NavMeshAgent agent;
@@ -124,10 +128,9 @@ public class EnemyView : MonoBehaviour
     {
         string stats = controller.GetEnemyStats().ToString();
         float difficulty = controller.GetDifficulty(currentFunctionVersion);
-        int binaryMovement = GetMovementTypeAsNumber();
-        // Mostrar el tipo de movimiento binario
+        int binaryMovement = GetMovementTypeAsNumber(); // Mostrar el tipo de movimiento binario
+        float score = controller.GetTotalScore(currentFunctionVersion, difficultyWeight, balanceWeight);
 
-        
 
         if (enemyStatsTxt != null)
             enemyStatsTxt.text = stats;
@@ -138,11 +141,12 @@ public class EnemyView : MonoBehaviour
         if (enemyStatsTxt != null)
             enemyStatsTxt.text += $"- Patrón de Movimiento: {binaryMovement}";
 
-        // Obtener las estadisticas y mostrarlas en consola
-        Debug.Log(stats);
+        // Obtener las estadisticas, dififultad y puntaje total y mostrarlos en consola
+        //Debug.Log(stats);
         Debug.Log("Dificultad del enemigo: " + difficulty);
         Debug.Log("FF usada: " + currentFunctionVersion);
-        Debug.Log("Patrón de movimiento (binario): " + binaryMovement);
+        Debug.Log("Patrón de movimiento: " + binaryMovement);
+        Debug.Log("TotalScore: " + score);
 
         UpdateColor(difficulty);
     }
@@ -182,7 +186,8 @@ public class EnemyView : MonoBehaviour
 
     void UpdateColor(float difficulty)
     {
-        float[] maxDifficulties = { 247.5f, 255.5f, 272.5f, 175f, 123.45f };
+        // Antiguas, sin normalizar: { 247.5f, 255.5f, 272.5f, 175f, 123.45f };
+        float[] maxDifficulties = { 10f, 12f, 10f, 6f, 5f };
 
         if (currentFunctionVersion < 1 || currentFunctionVersion > maxDifficulties.Length)
         {
@@ -264,7 +269,7 @@ public class EnemyView : MonoBehaviour
     public void TakeDamage(float damageAmount)
     {
         controller.GetEnemyStats().HP -= damageAmount;
-        Debug.Log($"Enemy HP: {controller.GetEnemyStats().HP}");
+        //Debug.Log($"Enemy HP: {controller.GetEnemyStats().HP}");
 
         // Verificar si el enemigo muere
         if (controller.GetEnemyStats().HP <= 0)
@@ -292,6 +297,5 @@ public class EnemyView : MonoBehaviour
         Debug.Log("La sombra ha sido derrotada");
         Destroy(gameObject);
     }
-
 
 }

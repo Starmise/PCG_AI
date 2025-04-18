@@ -52,6 +52,11 @@ public class EnemyController
         return enemyStats;
     }
 
+    public float GetTotalScore(int fitnessFunction, float difficultyWeight, float balanceWeight)
+    {
+        return enemyStats.CalculateTotalScore(fitnessFunction, difficultyWeight, balanceWeight);
+    }
+
     public bool ShouldEscape(Vector3 playerPosition, Vector3 enemyPosition)
     {
         // Si es un Escapista, calcula si debe escapar
