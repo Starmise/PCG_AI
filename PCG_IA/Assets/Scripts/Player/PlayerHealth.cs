@@ -15,7 +15,7 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        Debug.Log("El jugador tomó daño. Salud actual: " + currentHealth);
+        //Debug.Log("El jugador tomó daño. Salud actual: " + currentHealth);
 
         if (currentHealth <= 0)
         {

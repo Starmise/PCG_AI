@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 /// <summary>
 /// En MVC, Model solo es lógica para los datos básicos, por eso no se hace MonoBehaviour.
@@ -13,9 +14,19 @@ public class EnemyModel
     public float Speed;
     public string SpecialEffect; // Efectos especiales
 
-    [Header("Magic Numbers")]
-    public int minSpeedDiff = 15;
-    public int maxSpeedDiff = 5;
+    [Header("Weight Score")]
+    [Range(0f, 1f)]
+    [SerializeField] private float difficultyWeight = 0.5f;
+    [SerializeField] private float balanceWeight => 1f - difficultyWeight;
+
+    // Valores normalizados
+    float normHP;
+    float normAttackPower;
+    float normAttackRate;
+    float normSpeed;
+    float normDetectionRange;
+    float normSpeedDiff;
+
 
     // Propiedades binarizadas de efectos especiales
     public int HasPoison => SpecialEffect == "Poison" ? 1 : 0;
@@ -43,6 +54,17 @@ public class EnemyModel
         DetectionRange = detectionRange;
     }
 
+    private void UpdateNormalizedStats()
+    {
+        normHP = Normalize(HP, 50f, 200f);
+        normAttackPower = Normalize(AttackPower, 5f, 20f);
+        normAttackRate = Normalize(AttackRate, 0.5f, 2f);
+        normSpeed = Normalize(Speed, 1f, 8f);
+        normDetectionRange = Normalize(DetectionRange, 5f, 15f);
+
+        normSpeedDiff = (Speed > 4f) ? 0 : 1;
+    }
+
     /// <summary>
     /// Método encargado de normalizar valores, para no tener que ir haciendo
     /// opración por operación.
@@ -58,15 +80,7 @@ public class EnemyModel
     /// </summary>
     public float CalculateDifficulty(int functionVersion)
     {
-        // Valores normalizados
-        float normHP = Normalize(HP, 50f, 200f);
-        float normAttackPower = Normalize(AttackPower, 5f, 20f);
-        float normAttackRate = Normalize(AttackRate, 0.5f, 2f);
-        float normSpeed = Normalize(Speed, 1f, 8f);
-        float normDetectionRange = Normalize(DetectionRange, 5f, 15f);
-        float normMaxSpeedDiff = Normalize(maxSpeedDiff, 1f, 5f);
-        float normMinSpeedDiff = Normalize(minSpeedDiff, 0f, 1f);
-        float normSpeedDiff = (Speed > 4f) ? normMaxSpeedDiff : normMinSpeedDiff;
+        UpdateNormalizedStats();
 
         switch (functionVersion)
         {
@@ -88,16 +102,57 @@ public class EnemyModel
         }
     }
 
-    /// <summary>
-    /// Los valores especiales, de momento solo son valores numéricos.
-    /// </summary>
-    private float GetEffectValue()
+    public float CalculateTotalScore(int functionVersion)
     {
-        if (SpecialEffect == "Poison") return 7.5f;
-        if (SpecialEffect == "Burn") return 5f;
-        if (SpecialEffect == "Shock") return 3f;
-        return 0;
+        UpdateNormalizedStats();
+
+        float rawDifficulty = CalculateDifficulty(functionVersion);
+        float maxDifficulty = 1f;
+
+        // Acá rezamos para que los calculos sean correctos
+        switch (functionVersion)
+        {
+            case 1:
+                maxDifficulty = 10f;
+                break;
+            case 2:
+                maxDifficulty = 12f;
+                break;
+            case 3:
+                maxDifficulty = 10f;
+                break;
+            case 4:
+                maxDifficulty = 6f;
+                break;
+            case 5:
+                maxDifficulty = 5f;
+                break;
+            default:
+                Debug.LogError("Fitness Function no válida");
+                return 0;
+        }
+        float difficultyScore = Normalize(rawDifficulty, 0, maxDifficulty);
+
+        // Calculo del Balance
+        float sumStats = normHP + normAttackPower + normAttackRate + normSpeedDiff + GetEffectBinary() + normDetectionRange;
+        float balanceScore = 1f - Mathf.Clamp01(Mathf.Abs(sumStats / 6)); //Entre 6 por la cantidad de stats
+
+        // Ya el total
+        float totalScore = difficultyScore * 0.6f + balanceScore * 0.4f;
+
+        return totalScore;
     }
+
+    ///// <summary>
+    ///// Los valores especiales, de momento solo son valores numéricos.
+    ///// </summary>
+    //private float GetEffectValue()
+    //{
+    //    if (SpecialEffect == "Poison") return 7.5f;
+    //    if (SpecialEffect == "Burn") return 5f;
+    //    if (SpecialEffect == "Shock") return 3f;
+    //    return 0;
+    //}
 
     // Nuevo método binario
     private float GetEffectBinary()
