@@ -14,11 +14,6 @@ public class EnemyModel
     public float Speed;
     public string SpecialEffect; // Efectos especiales
 
-    [Header("Weight Score")]
-    [Range(0f, 1f)]
-    [SerializeField] private float difficultyWeight = 0.5f;
-    [SerializeField] private float balanceWeight => 1f - difficultyWeight;
-
     // Valores normalizados
     float normHP;
     float normAttackPower;
@@ -102,10 +97,19 @@ public class EnemyModel
         }
     }
 
-    public float CalculateTotalScore(int functionVersion)
+    public float CalculateBalance(int functionVersion)
     {
         UpdateNormalizedStats();
 
+        // Calculo del Balance
+        float sumStats = normHP + normAttackPower + normAttackRate + normSpeedDiff + GetEffectBinary() + normDetectionRange;
+        float balanceScore = 1f - Mathf.Clamp01(Mathf.Abs(sumStats / 6)); //Entre 6 por la cantidad de stats
+
+        return balanceScore;
+    }
+
+    public float CalculateTotalScore(int functionVersion, float difficultyWeight, float balanceWeight)
+    {
         float rawDifficulty = CalculateDifficulty(functionVersion);
         float maxDifficulty = 1f;
 
@@ -133,15 +137,10 @@ public class EnemyModel
         }
         float difficultyScore = Normalize(rawDifficulty, 0, maxDifficulty);
 
-        // Calculo del Balance
-        float sumStats = normHP + normAttackPower + normAttackRate + normSpeedDiff + GetEffectBinary() + normDetectionRange;
-        float balanceScore = 1f - Mathf.Clamp01(Mathf.Abs(sumStats / 6)); //Entre 6 por la cantidad de stats
-
-        // Ya el total
-        float totalScore = difficultyScore * 0.6f + balanceScore * 0.4f;
-
-        return totalScore;
+        float balanceScore = CalculateBalance(functionVersion);
+        return difficultyScore * difficultyWeight + balanceScore * balanceWeight;
     }
+
 
     ///// <summary>
     ///// Los valores especiales, de momento solo son valores numéricos.

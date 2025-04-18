@@ -909,6 +909,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 183453282}
     - target: {fileID: 6558398378121389573, guid: 7b09d4cd7fbc88f48b8e8b61b57fdc16, type: 3}
+      propertyPath: diffWeight
+      value: 0.696
+      objectReference: {fileID: 0}
+    - target: {fileID: 6558398378121389573, guid: 7b09d4cd7fbc88f48b8e8b61b57fdc16, type: 3}
       propertyPath: enemyStatsTxt
       value: 
       objectReference: {fileID: 1406156048}
@@ -916,6 +920,10 @@ PrefabInstance:
       propertyPath: difficulty_txt
       value: 
       objectReference: {fileID: 1353303973}
+    - target: {fileID: 6558398378121389573, guid: 7b09d4cd7fbc88f48b8e8b61b57fdc16, type: 3}
+      propertyPath: difficultyWeight
+      value: 0.487
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

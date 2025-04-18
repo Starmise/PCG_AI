@@ -27,6 +27,10 @@ public class EnemyView : MonoBehaviour
     public GameObject objectBurn;
     public GameObject objectShock;
 
+    [Header("Weight Score")]
+    [Range(0f, 1f)]
+    public float difficultyWeight = 0.5f; // En sí es el único que modifica
+    public float balanceWeight => 1f - difficultyWeight;
 
     private EnemyController controller;
     private NavMeshAgent agent;
@@ -125,7 +129,8 @@ public class EnemyView : MonoBehaviour
         string stats = controller.GetEnemyStats().ToString();
         float difficulty = controller.GetDifficulty(currentFunctionVersion);
         int binaryMovement = GetMovementTypeAsNumber(); // Mostrar el tipo de movimiento binario
-        float score = controller.GetTotalScore(currentFunctionVersion);
+        float score = controller.GetTotalScore(currentFunctionVersion, difficultyWeight, balanceWeight);
+
 
         if (enemyStatsTxt != null)
             enemyStatsTxt.text = stats;
