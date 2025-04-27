@@ -14,6 +14,8 @@ public class EnemyView : MonoBehaviour
     [Header("UI")]
     public TMP_Text enemyStatsTxt;
     public TMP_Text difficulty_txt;
+    public TMP_Text difficultyWeight_txt;
+    public TMP_Text balanceWeight_txt;
 
     [Header("Movement")]
     public Transform player;
@@ -142,11 +144,17 @@ public class EnemyView : MonoBehaviour
         if (enemyStatsTxt != null)
             enemyStatsTxt.text += $"- Patrón de Movimiento: {binaryMovement}";
 
+        if (balanceWeight_txt != null)
+            balanceWeight_txt.text = "BalanceScore Weight: " + balanceWeight.ToString();
+
+        if (difficultyWeight_txt != null)
+            difficultyWeight_txt.text = "DifficultyScore Weight: " + difficultyWeight.ToString();
+
         // Obtener las estadisticas, dififultad y puntaje total y mostrarlos en consola
         //Debug.Log(stats);
         Debug.Log("Dificultad del enemigo: " + difficulty);
         Debug.Log("FF usada: " + currentFunctionVersion);
-        Debug.Log("Patrón de movimiento: " + binaryMovement);
+        //Debug.Log("Patrón de movimiento: " + binaryMovement);
         Debug.Log("TotalScore: " + score);
 
         UpdateColor(difficulty);
@@ -228,7 +236,7 @@ public class EnemyView : MonoBehaviour
         string effect = controller.GetEnemyStats().SpecialEffect;
         GameObject effectObject; // Variable para hacer que los objetos se instancien como hijos
         Vector3 spawnPosition = new Vector3(transform.position.x, 2.3f, transform.position.z); // Como quiero que se inicie 2.3f en y, se hace esto
-        Debug.Log("Instanciando objeto: " + effect);
+        // Debug.Log("Instanciando objeto: " + effect);
         switch (effect)
         {
             case "Poison":
@@ -318,6 +326,12 @@ public class EnemyView : MonoBehaviour
 
         if (difficulty_txt == null)
             difficulty_txt = GameObject.Find("Difficulty_txt").GetComponent<TMP_Text>();
+        
+        if (balanceWeight_txt == null)
+            balanceWeight_txt = GameObject.Find("balanceWeight_txt").GetComponent<TMP_Text>();
+        
+        if (difficultyWeight_txt == null)
+            difficultyWeight_txt = GameObject.Find("difficultyWeight_txt").GetComponent<TMP_Text>();
 
         if (player == null)
             player = GameObject.FindWithTag("Player").transform;
