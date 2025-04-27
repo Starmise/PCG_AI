@@ -22,7 +22,6 @@ public class EnemyModel
     float normDetectionRange;
     float normSpeedDiff;
 
-
     // Propiedades binarizadas de efectos especiales
     public int HasPoison => SpecialEffect == "Poison" ? 1 : 0;
     public int HasBurn => SpecialEffect == "Burn" ? 1 : 0;
@@ -190,4 +189,33 @@ public class EnemyModel
                $"- Speed: {Mathf.RoundToInt(Speed)}\n" +
                $"- Special Effect: {SpecialEffect} {HasEffect}\n";
     }
+
+    public EnemyModel MutateHP(float newHP)
+    {
+        EnemyModel clone = Clone();
+        clone.HP = newHP;
+        return clone;
+    }
+
+    public EnemyModel MutateAttackPower(float delta)
+    {
+        EnemyModel clone = Clone();
+        clone.AttackPower = Mathf.Clamp(clone.AttackPower + delta, 5, 20);
+        return clone;
+    }
+
+
+    public EnemyModel Clone()
+    {
+        return new EnemyModel (
+            this.HP,
+            this.AttackPower,
+            this.AttackRate,
+            this.Speed,
+            this.SpecialEffect,
+            this.DetectionRange
+        );
+    }
+
+
 }

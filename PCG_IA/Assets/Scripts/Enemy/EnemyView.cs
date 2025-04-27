@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.AI;
+using Unity.VisualScripting;
 
 /// <summary>
 /// En MVC, View no es como nos habían dicho de que era solo para UI, View es ya tal cual
@@ -298,4 +299,34 @@ public class EnemyView : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public void InitializeFromModel(EnemyModel model, int version, float weight)
+    {
+        controller = new EnemyController(model); // Asumiendo que tienes constructor con modelo
+        agent = GetComponent<NavMeshAgent>();
+        agent.speed = model.Speed;
+
+        currentFunctionVersion = version;
+        difficultyWeight = weight;
+
+        UpdateUI();
+        HandleSpecialEffect();
+    }
+    private void Awake()
+    {
+        if (enemyStatsTxt == null)
+            enemyStatsTxt = GameObject.Find("EnemyStats_txt").GetComponent<TMP_Text>();
+
+        if (difficulty_txt == null)
+            difficulty_txt = GameObject.Find("Difficulty_txt").GetComponent<TMP_Text>();
+
+        if (player == null)
+            player = GameObject.FindWithTag("Player").transform;
+
+        if (puntoA == null)
+            puntoA = GameObject.Find("pointA").transform;
+
+        if (puntoB == null)
+            puntoB = GameObject.Find("pointB").transform;
+
+    }
 }
