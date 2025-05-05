@@ -54,12 +54,30 @@ public class EnemyGenerator : MonoBehaviour
         // Mutaciones! Cambiamos unas stats u listo
         List<EnemyModel> neighbors = new List<EnemyModel>();
 
-        // Por ahora HP; se me va el tiempo
+        // Mutacion HP;
         float step = 10f;
         if (enemy.HP + step <= 100) neighbors.Add(enemy.MutateHP(enemy.HP + step));
         if (enemy.HP - step >= 10) neighbors.Add(enemy.MutateHP(enemy.HP - step));
 
-        // Otras mutaciones pa despues
+        // Mutar poder de ataque
+        float stepAP = 1f;
+        if (enemy.AttackPower + stepAP <= 10) neighbors.Add(enemy.MutateAttackPower(enemy.AttackPower + stepAP));
+        if (enemy.AttackPower - stepAP >= 1) neighbors.Add(enemy.MutateAttackPower(enemy.AttackPower - stepAP));
+
+        // Mutar velocidad de ataque
+        float stepAR = 0.1f;
+        if (enemy.AttackRate + stepAR <= 1) neighbors.Add(enemy.MutateAttackRate(enemy.AttackRate + stepAR));
+        if (enemy.AttackRate - stepAR >= 0.1f) neighbors.Add(enemy.MutateAttackRate(enemy.AttackRate - stepAR));
+
+        // Mutar velocidad
+        float stepS = 1f;
+        if (enemy.Speed + stepS <= 4) neighbors.Add(enemy.MutateSpeed(enemy.Speed + stepS));
+        if (enemy.Speed - stepS >= 1) neighbors.Add(enemy.MutateSpeed(enemy.Speed - stepS));
+
+        // Mutar rango de detección
+        float stepDR = 1.5f;
+        if (enemy.DetectionRange + stepDR <= 7.5f) neighbors.Add(enemy.MutateDetectionRange(enemy.HP + stepDR));
+        if (enemy.DetectionRange - stepDR >= 1) neighbors.Add(enemy.MutateDetectionRange(enemy.HP - stepDR));
 
         return neighbors;
     }

@@ -204,6 +204,30 @@ public class EnemyModel
         return clone;
     }
 
+    
+    public EnemyModel MutateAttackRate(float delta)
+    {
+        EnemyModel clone = Clone();
+        clone.AttackRate = Mathf.Clamp(clone.AttackRate + delta, 0.5f, 2);
+        return clone;
+    }
+
+    
+    public EnemyModel MutateSpeed(float delta)
+    {
+        EnemyModel clone = Clone();
+        clone.Speed = Mathf.Clamp(clone.Speed + delta, 1, 8);
+        return clone;
+    }
+
+    
+    public EnemyModel MutateDetectionRange(float delta)
+    {
+        EnemyModel clone = Clone();
+        clone.Speed = Mathf.Clamp(clone.DetectionRange + delta, 5, 15);
+        return clone;
+    }
+
 
     public EnemyModel Clone()
     {
@@ -216,6 +240,4 @@ public class EnemyModel
             this.DetectionRange
         );
     }
-
-
 }
