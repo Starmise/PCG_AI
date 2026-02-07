@@ -159,6 +159,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyStatsTxt: {fileID: 0}
   difficulty_txt: {fileID: 0}
+  difficultyWeight_txt: {fileID: 0}
+  balanceWeight_txt: {fileID: 0}
   player: {fileID: 0}
   puntoA: {fileID: 0}
   puntoB: {fileID: 0}
@@ -208,7 +210,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.6
+  m_Radius: 0.7
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}

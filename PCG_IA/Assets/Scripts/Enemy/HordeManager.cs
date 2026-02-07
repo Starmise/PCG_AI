@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class HordeManager : MonoBehaviour
 {
     public EnemyGenerator generator; // Asignar desde el inspector
     public GameObject enemyPrefab;
-    public Transform[] spawnPoints;
+
+    [Header("Spawn Settings")]
+    public float spawnRadius = 25f;
+    public int maxSpawnAttempts = 8;
 
     private int waveNumber = 1;
     private List<GameObject> currentEnemies = new List<GameObject>();
@@ -36,16 +40,23 @@ public class HordeManager : MonoBehaviour
 
         for (int i = 0; i < enemiesInWave; i++)
         {
-            Vector3 spawnPos = spawnPoints[Random.Range(0, spawnPoints.Length)].position;
-            GameObject enemyGO = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
-
-            EnemyView view = enemyGO.GetComponent<EnemyView>();
-            if (view != null)
+            Vector3 spawnPos;
+            if (TryGetRandomNavMeshPosition(out spawnPos))
             {
-                view.InitializeFromModel(generated, fitnessVersion, difficultyWeight);
-            }
+                GameObject enemyGO = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
 
-            currentEnemies.Add(enemyGO);
+                EnemyView view = enemyGO.GetComponent<EnemyView>();
+                if (view != null)
+                {
+                    view.InitializeFromModel(generated, fitnessVersion, difficultyWeight);
+                }
+
+                currentEnemies.Add(enemyGO);
+            }
+            else
+            {
+                Debug.LogWarning("No se encontró posición válida en el Navmesh");
+            }
         }
 
         // Esperamos hasta que todos los enemigos sean derrotados
@@ -57,6 +68,27 @@ public class HordeManager : MonoBehaviour
         StartCoroutine(StartWave());
 
     }
+
+    // Metodo para intentar spawnear en algun punto del Navmesh
+    private bool TryGetRandomNavMeshPosition(out Vector3 result)
+    {
+        for (int i = 0; i < maxSpawnAttempts; i++)
+        {
+            Vector3 randomPoint = transform.position +
+                                  Random.insideUnitSphere * spawnRadius;
+
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(randomPoint, out hit, 3f, NavMesh.AllAreas))
+            {
+                result = hit.position;
+                return true;
+            }
+        }
+
+        result = Vector3.zero;
+        return false;
+    }
+
 
     // Método para esperar a que todos los enemigos sean derrotados
     IEnumerator WaitForAllEnemiesToDie()
