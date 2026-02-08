@@ -11861,9 +11861,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   generator: {fileID: 398783367}
-  enemyPrefab: {fileID: 7376220961947304210, guid: 28733077ba8b5d94590c602519015798, type: 3}
-  spawnPoints:
-  - {fileID: 2142796564}
+  escapistaPrefab: {fileID: 7376220961947304210, guid: 28733077ba8b5d94590c602519015798, type: 3}
+  agresivoPrefab: {fileID: 8052064625533700599, guid: 50055a851c60e664bb3b5c7818e0e33f, type: 3}
+  podadoraPrefab: {fileID: 5312408397605612976, guid: e984a47e4f52cc34f825ea93c27b51fe, type: 3}
+  spawnRadius: 25
+  maxSpawnAttempts: 8
   baseScore: 2
   scalingFactor: 1
   difficultyWeight: 0.6

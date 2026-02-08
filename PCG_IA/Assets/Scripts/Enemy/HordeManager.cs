@@ -6,7 +6,11 @@ using UnityEngine.AI;
 public class HordeManager : MonoBehaviour
 {
     public EnemyGenerator generator; // Asignar desde el inspector
-    public GameObject enemyPrefab;
+
+    [Header("Enemy Prefabs")]
+    public GameObject escapistaPrefab;
+    public GameObject agresivoPrefab;
+    public GameObject podadoraPrefab;
 
     [Header("Spawn Settings")]
     public float spawnRadius = 25f;
@@ -38,16 +42,21 @@ public class HordeManager : MonoBehaviour
         // Generar enemigos para la oleada
         int enemiesInWave = waveNumber * 2;  // Generamos un número de enemigos por oleada (ajustable)
 
+        EnemyView.EnemyType enemyType = (EnemyView.EnemyType)Random.Range(0,
+            System.Enum.GetValues(typeof(EnemyView.EnemyType)).Length);
+        GameObject prefabToSpawn = GetPrefabForType(enemyType);
+
         for (int i = 0; i < enemiesInWave; i++)
         {
             Vector3 spawnPos;
             if (TryGetRandomNavMeshPosition(out spawnPos))
             {
-                GameObject enemyGO = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+                GameObject enemyGO = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
 
                 EnemyView view = enemyGO.GetComponent<EnemyView>();
                 if (view != null)
                 {
+                    view.enemyType = enemyType; // Ahora selecciona el tipo de enemigo a instancuar
                     view.InitializeFromModel(generated, fitnessVersion, difficultyWeight);
                 }
 
@@ -67,6 +76,24 @@ public class HordeManager : MonoBehaviour
         Debug.Log("¡Comenzando la horda número " + waveNumber + "!");
         StartCoroutine(StartWave());
 
+    }
+
+    private GameObject GetPrefabForType(EnemyView.EnemyType type)
+    {
+        switch (type)
+        {
+            case EnemyView.EnemyType.Escapista:
+                return escapistaPrefab;
+
+            case EnemyView.EnemyType.Agresivo:
+                return agresivoPrefab;
+
+            case EnemyView.EnemyType.Podadora:
+                return podadoraPrefab;
+
+            default:
+                return escapistaPrefab;
+        }
     }
 
     // Metodo para intentar spawnear en algun punto del Navmesh

@@ -55,10 +55,11 @@ public class EnemyView : MonoBehaviour
         // Solo olvidaste poner que la velocidad del agente NavMesh fuera igual a la del Model
         agent.speed = controller.GetEnemyStats().Speed;
 
-        // Asignar un tipo de enemigo aleatorio si no ha sido definido manualmente en el Inspector
-        if (!Application.isEditor || enemyType == default)
+        // Recordad asignar un tipo de enemigo si no ha sido definido manualmente en el Inspector
+        if (!Application.isEditor && enemyType == default)
         {
-            enemyType = (EnemyType)Random.Range(0, System.Enum.GetValues(typeof(EnemyType)).Length);
+            // enemyType = (EnemyType)Random.Range(0, System.Enum.GetValues(typeof(EnemyType)).Length);
+            Debug.LogWarning("EnemyType no fue asignado antes del spawn");
         }
 
         Debug.Log("Enemigo generado: " + enemyType);
@@ -319,6 +320,7 @@ public class EnemyView : MonoBehaviour
         UpdateUI();
         HandleSpecialEffect();
     }
+
     private void Awake()
     {
         if (enemyStatsTxt == null)

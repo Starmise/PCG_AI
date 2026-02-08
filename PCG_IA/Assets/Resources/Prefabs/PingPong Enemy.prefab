@@ -1616,7 +1616,7 @@ MonoBehaviour:
   player: {fileID: 0}
   puntoA: {fileID: 0}
   puntoB: {fileID: 0}
-  enemyType: 0
+  enemyType: 2
   objectPoison: {fileID: 5233422609807489235, guid: bff096a5d87cb394b86dfc0c0cae4300, type: 3}
   objectBurn: {fileID: 796104273589541254, guid: 5c634cdf6eb2d3e4e8fc649987f37a6c, type: 3}
   objectShock: {fileID: 5458614684087453273, guid: bf100e336be5c6b4892f73628dc6bb73, type: 3}
