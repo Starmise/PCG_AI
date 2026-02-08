@@ -42,12 +42,12 @@ public class HordeManager : MonoBehaviour
         // Generar enemigos para la oleada
         int enemiesInWave = waveNumber * 2;  // Generamos un número de enemigos por oleada (ajustable)
 
-        EnemyView.EnemyType enemyType = (EnemyView.EnemyType)Random.Range(0,
-            System.Enum.GetValues(typeof(EnemyView.EnemyType)).Length);
-        GameObject prefabToSpawn = GetPrefabForType(enemyType);
-
         for (int i = 0; i < enemiesInWave; i++)
         {
+            EnemyView.EnemyType enemyType = (EnemyView.EnemyType)Random.Range(0,
+            System.Enum.GetValues(typeof(EnemyView.EnemyType)).Length);
+            GameObject prefabToSpawn = GetPrefabForType(enemyType);
+
             Vector3 spawnPos;
             if (TryGetRandomNavMeshPosition(out spawnPos))
             {

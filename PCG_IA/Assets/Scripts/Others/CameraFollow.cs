@@ -6,9 +6,14 @@ public class CameraFollow : MonoBehaviour
     public Vector3 offset = new Vector3(4.5f, 4.5f, -10f);
     public float smoothSpeed = 5f;
     public float cameraDistance = 5f;
-    public LayerMask collisionLayers;
 
-    private Vector3 desiredPosition;
+    [Header("Collision Settings")]
+    public float cameraRadius = 0.3f;
+    public float minDistance = 0.8f;
+    public float maxDistance = 6f;
+    public LayerMask collisionLayer;
+
+    private float currentDistance;
 
     void Start()
     {
@@ -18,23 +23,38 @@ public class CameraFollow : MonoBehaviour
             if (playerObject != null)
                 player = playerObject.transform;
         }
+
+        currentDistance = maxDistance;
     }
 
     void LateUpdate()
     {
-        if (player != null)
+        if (!player) return;
+
+        float height = Mathf.Lerp(1.5f, 2.5f, currentDistance / maxDistance);
+        Vector3 targetOrigin = player.position + Vector3.up * height;
+
+        Vector3 direction = (transform.forward * -1f).normalized;
+
+        float targetDistance = maxDistance;
+
+        RaycastHit hit;
+        if (Physics.SphereCast(
+            targetOrigin,
+            cameraRadius,
+            direction,
+            out hit,
+            maxDistance,
+            collisionLayer))
         {
-            Vector3 targetPosition = player.position + offset;
-
-            // Raycast para detectar colisiones de la cámraa
-            RaycastHit hit;
-            if (Physics.Raycast(player.position, (targetPosition - player.position).normalized, out hit, cameraDistance, collisionLayers))
-            {
-                targetPosition = hit.point + hit.normal * 0.2f;
-            }
-
-            transform.position = Vector3.Lerp(transform.position, targetPosition, smoothSpeed * Time.deltaTime);
-            transform.LookAt(player); // La cámara siempre mira hacia el jugador, como vimos en gráficas LookAt es el que actualiza la matriz de vista
+            targetDistance = Mathf.Clamp(hit.distance - 0.2f, minDistance, maxDistance);
         }
+
+        currentDistance = Mathf.Lerp(currentDistance, targetDistance, Time.deltaTime * smoothSpeed);
+
+        Vector3 desiredPosition = targetOrigin + direction * currentDistance;
+        transform.position = desiredPosition;
+
+        transform.LookAt(targetOrigin);
     }
 }
