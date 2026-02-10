@@ -1609,10 +1609,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bd9172eb335c984f92110c982d60bb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyStatsTxt: {fileID: 0}
-  difficulty_txt: {fileID: 0}
-  difficultyWeight_txt: {fileID: 0}
-  balanceWeight_txt: {fileID: 0}
+  worldUIPrefab: {fileID: -6844967135835783560, guid: 1c444c6e12ab97349b3a25163ab41426, type: 3}
   player: {fileID: 0}
   puntoA: {fileID: 0}
   puntoB: {fileID: 0}

@@ -11,11 +11,8 @@ using Unity.VisualScripting;
 /// </summary>
 public class EnemyView : MonoBehaviour
 {
-    [Header("UI")]
-    public TMP_Text enemyStatsTxt;
-    public TMP_Text difficulty_txt;
-    public TMP_Text difficultyWeight_txt;
-    public TMP_Text balanceWeight_txt;
+    [Header("World UI")]
+    public EnemyUI worldUIPrefab;
 
     [Header("Movement")]
     public Transform player;
@@ -37,6 +34,7 @@ public class EnemyView : MonoBehaviour
 
     private EnemyController controller;
     private NavMeshAgent agent;
+    private EnemyUI worldUI;
     private Vector3 destinoActual;
     private float attackCooldown = 0f;
     private int currentFunctionVersion = 1; // Función inicial
@@ -51,6 +49,10 @@ public class EnemyView : MonoBehaviour
     {
         controller = EnemyController.CreateRandomEnemy();
         agent = GetComponent<NavMeshAgent>();
+
+        // Instancia del cnavas
+        worldUI = Instantiate(worldUIPrefab, transform);
+        worldUI.Initialize(transform);
 
         // Solo olvidaste poner que la velocidad del agente NavMesh fuera igual a la del Model
         agent.speed = controller.GetEnemyStats().Speed;
@@ -135,22 +137,6 @@ public class EnemyView : MonoBehaviour
         int binaryMovement = GetMovementTypeAsNumber(); // Mostrar el tipo de movimiento binario
         float score = controller.GetTotalScore(currentFunctionVersion, difficultyWeight, balanceWeight);
 
-
-        if (enemyStatsTxt != null)
-            enemyStatsTxt.text = stats;
-
-        if (difficulty_txt != null)
-            difficulty_txt.text = "Difficulty: " + Mathf.RoundToInt(difficulty); // Sin decimales
-
-        if (enemyStatsTxt != null)
-            enemyStatsTxt.text += $"- Patrón de Movimiento: {binaryMovement}";
-
-        if (balanceWeight_txt != null)
-            balanceWeight_txt.text = "BalanceScore Weight: " + balanceWeight.ToString();
-
-        if (difficultyWeight_txt != null)
-            difficultyWeight_txt.text = "DifficultyScore Weight: " + difficultyWeight.ToString();
-
         // Obtener las estadisticas, dififultad y puntaje total y mostrarlos en consola
         //Debug.Log(stats);
         Debug.Log("Dificultad del enemigo: " + difficulty);
@@ -159,6 +145,15 @@ public class EnemyView : MonoBehaviour
         Debug.Log("TotalScore: " + score);
 
         UpdateColor(difficulty);
+
+        if (worldUI != null)
+        {
+            worldUI.UpdateValues(
+                difficulty,
+                difficultyWeight,
+                balanceWeight
+            );
+        }
     }
 
     /// <summary>
@@ -321,21 +316,22 @@ public class EnemyView : MonoBehaviour
         HandleSpecialEffect();
     }
 
+    void OnBecameVisible()
+    {
+        if (worldUI != null)
+            worldUI.SetVisible(true);
+    }
+
+    void OnBecameInvisible()
+    {
+        if (worldUI != null)
+            worldUI.SetVisible(false);
+    }
+
+
     private void Awake()
     {
-        if (enemyStatsTxt == null)
-            enemyStatsTxt = GameObject.Find("EnemyStats_txt").GetComponent<TMP_Text>();
-
-        if (difficulty_txt == null)
-            difficulty_txt = GameObject.Find("Difficulty_txt").GetComponent<TMP_Text>();
-        
-        if (balanceWeight_txt == null)
-            balanceWeight_txt = GameObject.Find("balanceWeight_txt").GetComponent<TMP_Text>();
-        
-        if (difficultyWeight_txt == null)
-            difficultyWeight_txt = GameObject.Find("difficultyWeight_txt").GetComponent<TMP_Text>();
-
-        if (player == null)
+       if (player == null)
             player = GameObject.FindWithTag("Player").transform;
 
         if (puntoA == null)
@@ -343,6 +339,5 @@ public class EnemyView : MonoBehaviour
 
         if (puntoB == null)
             puntoB = GameObject.Find("pointB").transform;
-
     }
 }
