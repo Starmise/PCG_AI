@@ -15,7 +15,7 @@ public class KeyManager : MonoBehaviour
     public void AddKey()
     {
         keyCount++;
-        keyText.text = "" + keyCount; // Actualiza la UI
+        keyText.text = "Keys " + keyCount; // Actualiza la UI
     }
 
     public bool HasKey()
